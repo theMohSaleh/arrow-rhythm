@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+}
+
+button {
+    height: 40px;
+    width: 100px;
+}
+
+.instructions {
+    border: 2px solid black;
+    margin: 10px 20px 10px 20px;
+}
+
+.interactive-field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 10px 0;
+}
+
+#difficulty-div {
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.difficulty-button {
+    height: 30px;
+    width: 50px;
+    padding: 0;
+    border: none;
+}
