@@ -1,0 +1,14 @@
+As a user in this game, I want
+
+- to be able to read the instructions on how to play the game before starting the game itself in the starting/landing page.
+- to be able to cycle between "Easy", "Medium", "Hard" as the game difficulty.
+- to be able to start the game by clicking on the Play button, which should start the game on the currently selected difficulty.
+- to be able to tell when should I time my button presses.
+- to be able to see the order of the arrows to be pressed of each sequence displayed before the first arrow of that sequence.
+- to be able to see the arrows ahead of time so I can know and time my button press more easily.
+- to have visual feedback telling me if I have pressed the arrows on the correct time or not.
+- to see my HP drop upon missing any button in any sequence, which should result in a loss upon losing all of my HP.
+- to see a game over screen or a victory screen upon losing or winning the game.
+- to able to click on retry on the game over screen to quickly restart the level or click on home to go back to the starting page.
+- to be able to click on home in the victory screen to go back to the starting page.
+- the game to end and result in a victory if my HP did not drop to 0

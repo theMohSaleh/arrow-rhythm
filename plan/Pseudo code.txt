@@ -1,0 +1,28 @@
+// define the constants for the game:
+  // const for game canvas
+
+// define the variables for the game:
+  // variable for game difficulty
+  // variable for health points
+  // variable to count the number of sequences
+  // variable for time interval
+
+// select the cache elements
+
+// add event listeners for 
+  // play, home and retry buttons
+  // key presses for the arrows
+
+// when the user clicks on the Play button, call Init and set the difficulty to the selected one.
+  // hide the instructions and buttons elements and display health bar element
+  // call gameStart function which will start an interval based on difficulty
+
+// call arrowSeq which will pick a random sequence from the sequences array, which has multiple data of an array of 4 arrow sequence that will be displayed.
+
+// arrowSeq will call a function that check IF the user inputs the correct arrow at the correct time (there should be a way to check if the user presses a button on the correct time)
+
+// IF the user presses the wrong arrow or IF the user completely missed the window to press the button, HP should decrement by 10
+
+// render the win or lose message when the game ends 
+
+// call init when the user clicks on retry

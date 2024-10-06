@@ -1,0 +1,3 @@
+Arrow Rhythm
+
+A rhythm game where the player needs to use the arrow keys and press the corresponding arrows that appear on the screen in the correct order and timing.
