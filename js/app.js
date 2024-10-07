@@ -69,7 +69,11 @@ class Arrow {
         this.draw = function () {
             ctx.font = "30px Arial"
             ctx.fillText(this.arrowType, this.x, this.y);
-            ctx.strokeText(this.arrowType, x + 40, y + 40)
+            if (x + 40 > canvas.width - 40) {
+                ctx.strokeText(this.arrowType, x - 40, y - 40)
+            } else {
+                ctx.strokeText(this.arrowType, x + 40, y + 40)
+            }
         }
 
         this.update = function () {
@@ -100,12 +104,12 @@ class Arrow {
             // let keyPressed = logKey();
 
             // console.log(keyPressed);
-            
+
             // if (this.x === x + errorMargin || this.x === x - errorMargin)
             // {
             //     switch (e.code) {
             //         case 'ArrowUp':
-                        
+
             //     }
             //     console.log("timed correctly");
             // }
@@ -150,7 +154,7 @@ function startGame() {
             velocity = 2;
             break;
         case 'Hard':
-            velocity = 4;
+            velocity = 3;
             break;
     }
 
@@ -224,7 +228,6 @@ function spawnArrow() {
     arrowArray[arrCount].update();
     arrowArray[arrCount + 1].update();
     arrowArray[arrCount + 2].update();
-    // arrowArray[arrCount + 3].update();
 }
 
 
@@ -269,7 +272,7 @@ playBtn.addEventListener('click', handlePlayClick);
 retryBtn.addEventListener('click', handleRetryClick);
 diffSection.addEventListener('click', handleDiffClick);
 
-document.addEventListener('keyup', logKey)
+document.addEventListener('keydown', logKey)
 
 function logKey(e) {
     console.log(e.code);
