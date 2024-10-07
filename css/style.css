@@ -3,27 +3,139 @@
 }
 
 body {
-    text-align: center;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 252, 231, 1) 100%);
+}
+
+/* google font */
+
+.rajdhani-light {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.rajdhani-regular {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.rajdhani-medium {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.rajdhani-semibold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.rajdhani-bold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* general elements */
+
+h1 {
+    font-size: 50px;
 }
 
 button {
-    height: 40px;
+    font-size: 30px;
     width: 100px;
+    height: 70px;
 }
 
-.instructions {
-    border: 2px solid black;
-    margin: 10px 20px 10px 20px;
+
+/* classes */
+
+.hidden {
+    display: none;
+    visibility: hidden;
 }
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.gameContainer {
+    border: 2px solid black;
+}
+
+@media screen and (width > 1200px) {
+    .gameContainer {
+        width: 875px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .gameContainer {
+        width: 800px;
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .gameContainer {
+        width: 600px;
+        height: 250px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .gameContainer {
+        width: 450px;
+        height: 200px;
+    }
+}
+
+
 
 .interactive-field {
+    height: 150px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0 0 10px 0;
+    row-gap: 10px;
 }
 
-#difficulty-div {
+
+.difficulty-button {
+    height: 30px;
+    width: 40px;
+    padding: 0;
+    border-radius: 10px;
+    border: none;
+}
+
+.difficulty-button:hover {
+    color: blue;
+    background-color: lightgray;
+}
+
+.difficulty-button:active {
+    background-color: rgb(241, 241, 241);
+    transition: none;
+}
+
+/* IDs */
+
+
+#difficulty {
+    font-size: 30px;
+}
+
+#difficulty-section {
+    height: 100px;
     width: 300px;
     display: flex;
     flex-wrap: wrap;
@@ -31,9 +143,9 @@ button {
     align-items: center;
 }
 
-.difficulty-button {
-    height: 30px;
-    width: 50px;
-    padding: 0;
-    border: none;
-}
+/* #gameCanvas {
+    width: 800px;
+    height: 500px;
+    border: 1px black solid;
+    overflow: hidden;
+} */
