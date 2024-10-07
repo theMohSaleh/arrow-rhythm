@@ -8,24 +8,41 @@ const arrowTypesArray = [
 ];
 
 const levelCombos = [
-    ["→", "→", "↑", "↓"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
-    ["↑", "←", "↑", "↑"],
+    // ["→", "→", "↑", "↓"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    // ["↑", "←", "↑", "↑"],
+    [
+        { arrow: "→", pos: { x: 100, y: 50 } },
+        { arrow: "→", pos: { x: 120, y: 50 } },
+        { arrow: "↑", pos: { x: 140, y: 50 } },
+        { arrow: "↓", pos: { x: 160, y: 50 } },
+    ],
+    [
+        { arrow: "↑", pos: { x: 140, y: -100 } },
+        { arrow: "→", pos: { x: 100, y: -100 } },
+        { arrow: "↓", pos: { x: 160, y: -100 } },
+        { arrow: "→", pos: { x: 120, y: -100 } },
+    ],
+    [
+        { arrow: "↑", pos: { x: 140, y: 20 } },
+        { arrow: "→", pos: { x: 100, y: 20 } },
+        { arrow: "↓", pos: { x: 160, y: 20 } },
+        { arrow: "→", pos: { x: 120, y: 20 } },
+    ],
 ]
 
-const errorMargin = 10;
+const errorMargin = 50; // user margin for each beat in milliseconds
 
 const arrowArray = [];
-
 
 const gameDifficulty = [
     'Easy', 'Normal', 'Hard',
@@ -40,6 +57,7 @@ let diffIndex;
 let lose;
 let velocity;
 let game;
+
 
 /*----- Cached Element References  -----*/
 
@@ -58,10 +76,12 @@ const ctx = canvas.getContext("2d");
 // arrow class that represents each arrow drawn on the screen
 class Arrow {
     constructor(x, y, dx, dy) {
-        this.x = x;
-        this.y = y;
-        this.dx = dx;
-        this.dy = dy;
+        this.x = x; // X axis on the canvas
+        this.y = y; // Y axis on the canvas
+        this.dx = dx; // X velocity
+        this.dy = dy; // Y velocity
+        this.startTimer = performance.now();
+        this.arrowDuration = 3000;
         this.stopped = false;
         this.missed = false;
         this.arrowType = arrowTypesArray[Math.floor(Math.random() * 4)]
@@ -69,10 +89,25 @@ class Arrow {
         this.draw = function () {
             ctx.font = "30px Arial"
             ctx.fillText(this.arrowType, this.x, this.y);
-            if (x + 40 > canvas.width - 40) {
-                ctx.strokeText(this.arrowType, x - 40, y - 40)
+
+            ctx.strokeText(this.arrowType, canvas.width / 2 + 50, canvas.height / 2 + 100)
+            // if (x + 40 > canvas.width - 40) {
+            //     ctx.strokeText(this.arrowType, x - 40, y - 40)
+            // } else {
+            //     ctx.strokeText(this.arrowType, x + 40, y + 40)
+            // }
+        }
+
+        this.checkBeat = function () {
+            const time = performance.now();
+            const arrowTime = time - this.startTimer;
+                        
+            if (Math.abs(arrowTime - this.arrowDuration) <= this.startTimer) {
+                console.log("arrow hit");
+                return;
             } else {
-                ctx.strokeText(this.arrowType, x + 40, y + 40)
+                console.log('missed');
+                return;
             }
         }
 
@@ -96,23 +131,9 @@ class Arrow {
 
             // set a time limit for each arrow drawn
             setTimeout(() => {
-                this.missed = true;
                 this.stopped = true;
                 return
             }, 3100);
-
-            // let keyPressed = logKey();
-
-            // console.log(keyPressed);
-
-            // if (this.x === x + errorMargin || this.x === x - errorMargin)
-            // {
-            //     switch (e.code) {
-            //         case 'ArrowUp':
-
-            //     }
-            //     console.log("timed correctly");
-            // }
 
             this.draw();
         }
@@ -158,28 +179,12 @@ function startGame() {
             break;
     }
 
-    generateArrows();
     game = setInterval(() => {
-        pen = setTimeout(() => {
-            // console.log(arrowArray[arrCount].missed);
-
-            // if (arrowArray[arrCount].missed) {
-            hp -= 10;
-            // }
-        }, 3000)
         arrCount++;
     }, 1000);
     drawGame();
-}
 
-function generateArrows() {
-    for (let i = 0; i < 50; i++) {
-
-        let xMove = (Math.floor(Math.random() * canvas.width));
-        let yMove = (Math.floor(Math.random() + canvas.height - 100));
-
-        arrowArray.push(new Arrow(xMove, yMove, velocity, velocity))
-    }
+    renderArrows(0);
 }
 
 function gameOver() {
@@ -187,7 +192,6 @@ function gameOver() {
     retryBtn.classList.remove('hidden');
     lose = true;
     clearInterval(game);
-    clearTimeout(pen);
 }
 
 function drawGame() {
@@ -206,13 +210,6 @@ function drawGame() {
     ctx.restore();
 
     //render arrow
-    if (arrCount < 10) {
-        spawnArrow();
-    } else {
-        console.log('count ended');
-        setTimeout(gameOver, 3500);
-        return;
-    }
 
     // if hp is at 0, stop call gameover and stop drawing
     if (hp <= 0) {
@@ -226,8 +223,37 @@ function drawGame() {
 
 function spawnArrow() {
     arrowArray[arrCount].update();
-    arrowArray[arrCount + 1].update();
-    arrowArray[arrCount + 2].update();
+    // arrowArray[arrCount + 1].update();
+    // arrowArray[arrCount + 2].update();
+}
+
+function renderArrows(comboIdx) {
+    console.log(levelCombos[comboIdx]);
+    
+    const combo = levelCombos[comboIdx];
+    let delay = 0;
+
+    combo.forEach((arr, index) => {
+        setTimeout(() => {
+            drawArrow(arr);
+        }, delay);
+
+        delay += 1000;
+    });
+
+    setTimeout(() => {
+        // start next combo
+        if (comboIdx < levelCombos.length - 1) {
+            renderArrows(comboIdx+1)
+        }
+    }, delay + 2000);
+}
+
+function drawArrow(arr) {
+    ctx.font = "30px Arial";
+    ctx.fillStyle = 'black';
+    ctx.fillText = (arr.arrow, arr.pos.x, arr.pos.y);
+
 }
 
 
@@ -266,14 +292,20 @@ function handleRetryClick() {
 }
 
 
+function handleKeyPress(event) {
+    if (event.code === 'Space') {
+        arrowArray.forEach(arr => {
+            if (!arr.stopped) {
+                arr.checkBeat();
+            }
+        })
+    }
+}
+
+
 /*----------- Event Listeners ----------*/
 
 playBtn.addEventListener('click', handlePlayClick);
 retryBtn.addEventListener('click', handleRetryClick);
 diffSection.addEventListener('click', handleDiffClick);
-
-document.addEventListener('keydown', logKey)
-
-function logKey(e) {
-    console.log(e.code);
-}
+document.addEventListener('keydown', handleKeyPress)
