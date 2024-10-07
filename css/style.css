@@ -96,8 +96,6 @@ button {
     }
 }
 
-
-
 .interactive-field {
     height: 150px;
     display: flex;
@@ -118,7 +116,7 @@ button {
 }
 
 .difficulty-button:hover {
-    color: blue;
+    color: darkorange;
     background-color: lightgray;
 }
 
@@ -142,10 +140,3 @@ button {
     justify-content: space-around;
     align-items: center;
 }
-
-/* #gameCanvas {
-    width: 800px;
-    height: 500px;
-    border: 1px black solid;
-    overflow: hidden;
-} */
