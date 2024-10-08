@@ -1,5 +1,6 @@
 /*-------------- Constants -------------*/
 
+// the set of combos in each level
 const levelCombos = [
     [
         { arrow: "→", startPos: { x: 100, y: 50 }, hitPos: { x: 210, y: 160 }, velocity: 1 },
@@ -35,10 +36,9 @@ const levelCombos = [
 
 const errorMargin = 50; // user margin for each beat in milliseconds
 
-const arrowArray = [];
+const arrowArray = []; // used to show which arrows to currently display
 
-const mistakeArray = [];
-
+// available game difficulties
 const gameDifficulty = [
     'Easy', 'Normal', 'Hard',
 ]
@@ -48,11 +48,11 @@ const gameDifficulty = [
 
 let hp;
 let arrCount;
-let diffIndex;
+let diffIndex; // difficulty index
 let victory;
 let lose;
 let arrowSpeed;
-let game;
+let game; // game frame request
 let incrementInterval;
 let incrementTimeout;
 let appendArrowTimeout;
@@ -69,7 +69,7 @@ const retryBtn = document.querySelector('#retryBtn');
 const diffSection = document.querySelector("#difficulty-section");
 const diffText = document.querySelector("#difficulty");
 
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d"); // used for styling and drawing 
 
 /*-------------- Functions -------------*/
 
@@ -89,11 +89,14 @@ class Arrow {
 
         // method to draw arrow
         this.draw = function () {
+            // check if user did not hit the arrow early
             if (!this.early) {
+                // check if arrow has not been hit on beat yet
                 if (!this.hit) {
+                    // draw arrow
                     ctx.font = "30px Arial"
                     ctx.fillText(this.arrowType, this.x, this.y);
-
+                    // draw ghost arrow (where the arrow needs to align for the timing)
                     ctx.strokeText(this.arrowType, hitX, hitY);
                 } else {
                     // render check mark if arrow was hit on time
@@ -104,7 +107,7 @@ class Arrow {
                     ctx.restore();
                 }
             } else {
-                // render check mark if arrow was hit on time
+                // render X if arrow was was hit too early
                 ctx.save();
                 ctx.font = "25px Arial";
                 ctx.fillStyle = 'red';
@@ -113,6 +116,7 @@ class Arrow {
             }
         }
 
+        // method to check the timing of the arrow press
         this.checkBeat = function (keyPress) {
             const time = performance.now();
             const arrowTime = time - this.startTimer;
@@ -151,6 +155,7 @@ class Arrow {
             }
         }
 
+        // updating rendered arrow. this is a recursive method and only stops when arrow duration ends
         this.update = function () {
             // if the arrow expired, stop rendering it
             if (this.stopped) {
@@ -221,10 +226,13 @@ function startGame() {
             arrowSpeed = 3;
             break;
     }
+    // render game canvas
     drawGame();
+    // start level combos
     renderArrows(0);
 }
 
+// function to display victory screen
 function gameWin() {
     // display difficulty section and play button
     diffSection.classList.remove('hidden');
@@ -246,6 +254,7 @@ function gameOver() {
     clearAllIntAndTimeout();
 }
 
+// function to stop intervals and timeouts when needed
 function clearAllIntAndTimeout() {
     clearInterval(game);
     clearInterval(incrementInterval);
@@ -259,6 +268,7 @@ function drawGame() {
     // clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    // render health bar
     drawHealthBar();
 
     //render arrows
@@ -276,11 +286,18 @@ function drawGame() {
     requestAnimationFrame(drawGame)
 }
 
+// display health bar
 function drawHealthBar() {
+
     ctx.save();
 
-    // draw health bar
-    ctx.fillStyle = 'green';
+    // set health bar color to green when health is above 30, otherwise to red
+    if (hp > 30) {
+        ctx.fillStyle = 'green';
+    } else {
+        ctx.fillStyle = 'red';
+    }
+    // draw health bar and text
     ctx.fillRect(canvas.width / 20 - 15, (canvas.height / 20), (hp * 2), 18);
     ctx.font = '15px Arial';
     ctx.fillText(`${hp}/100`, canvas.width / 20 + 190, (canvas.height / 20 + 13));
@@ -309,12 +326,16 @@ function updateArrows() {
     }
 }
 
+// function to start rendering arrows based on level,
+// this function keeps repeating until all combos are rendered or if the game ended.
 function renderArrows(comboIdx) {
     // get the set combo in the level combos array
     const combo = levelCombos[comboIdx];
     let delay = 0 // delay to the arrows to spawn
 
+    // increase count to move array that spawns the arrows every 1.9 seconds
     incrementTimeout = setTimeout(() => {
+        // increase count every 1 second
         incrementInterval = setInterval(() => {
             arrCount++;
         }, 1000);
@@ -328,6 +349,7 @@ function renderArrows(comboIdx) {
         delay += 1000;
     });
 
+    // reset previous increment interval
     clearInterval(incrementInterval);
 
     // after the previous foreach ends, wait 2 seconds and then reinvoke this function to start next combo
@@ -344,6 +366,7 @@ function renderArrows(comboIdx) {
     }, delay + 2000);
 }
 
+// function to add arrow to arrowArray, which is used to display the arrows
 function drawArrow(arr) {
     arrowArray.push(new Arrow(
         arr.arrow,
@@ -406,7 +429,7 @@ function handleKeyPress(event) {
         // check beat for every arrow available
         arrowArray.forEach(arr => {
             if (!arr.stopped) {
-                arr.checkBeat(event.code);
+                arr.checkBeat(event.code); // pass key pressed code
             }
         })
     }
