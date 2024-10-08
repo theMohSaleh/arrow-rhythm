@@ -43,7 +43,6 @@ const gameDifficulty = [
     'Easy', 'Normal', 'Hard',
 ]
 
-
 /*---------- Variables (state) ---------*/
 
 let hp;
@@ -66,6 +65,7 @@ const nextBtn = document.querySelector("#nextBtn");
 const backBtn = document.querySelector("#backBtn");
 const playBtn = document.querySelector('#playBtn');
 const retryBtn = document.querySelector('#retryBtn');
+const homeBtn = document.querySelector('#homeBtn');
 const diffSection = document.querySelector("#difficulty-section");
 const diffText = document.querySelector("#difficulty");
 
@@ -194,17 +194,47 @@ function init() {
     victory = false;
     lose = false;
     retryBtn.classList.add('hidden');
+    homeBtn.classList.add('hidden');
+    diffSection.classList.remove('hidden');
+    playBtn.classList.remove('hidden');
     arrowSpeed = 0;
     keyPressed = false;
+
+    render();
 }
 
 function render() {
     diffText.textContent = gameDifficulty[diffIndex];
+    // clear canvas
+    ctx.font = '50px Arial';
+    if (victory) {
+        ctx.save();
+        ctx.fillStyle = 'green';
+        ctx.fillText("You Win!", canvas.width / 3 - 20, canvas.height / 2);
+
+        ctx.restore();
+    } else if (lose) {
+        ctx.save();
+
+        ctx.fillStyle = 'red';
+        ctx.fillText("Game Over", canvas.width / 3 - 40, canvas.height / 2 - 25);
+        ctx.fillText("You lose!", canvas.width / 3 - 20, canvas.height / 2 + 25);
+
+        ctx.restore();
+    } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.save();
+        ctx.font = '16px Arial';
+        ctx.fillText(InstructionsMsg[0], 10, 30);
+        ctx.fillText(InstructionsMsg[1], 10, 60);
+        ctx.fillText(InstructionsMsg[2], 10, 90);
+
+        ctx.restore();
+    }
 }
 
 // initalize on load
 init();
-render();
 
 // function to start the game
 function startGame() {
@@ -235,28 +265,29 @@ function startGame() {
 // function to display victory screen
 function gameWin() {
     // display difficulty section and play button
-    diffSection.classList.remove('hidden');
-    playBtn.classList.remove('hidden');
+    homeBtn.classList.remove('hidden');
     victory = true;
     // stop all intervals
     clearAllIntAndTimeout();
+    render();
 }
 
 // function to stop game and display a game over screen
 function gameOver() {
-    diffSection.classList.remove('hidden');
     // add a 1.8s timer to show the retry button to avoid game breaking bug when restarting the level too quickly
     setTimeout(() => {
         retryBtn.classList.remove('hidden');
+        homeBtn.classList.remove('hidden');
     }, 1800)
     lose = true;
     // clear all intervals
     clearAllIntAndTimeout();
+    render();
 }
 
-// function to stop intervals and timeouts when needed
+// function to stop frame requests, intervals and timeouts
 function clearAllIntAndTimeout() {
-    clearInterval(game);
+    cancelAnimationFrame(game);
     clearInterval(incrementInterval);
     clearTimeout(incrementTimeout);
     clearTimeout(appendArrowTimeout);
@@ -283,7 +314,7 @@ function drawGame() {
     }
 
     // repeat animation
-    requestAnimationFrame(drawGame)
+    game = requestAnimationFrame(drawGame)
 }
 
 // display health bar
@@ -401,14 +432,14 @@ function handleDiffClick(event) {
     diffText.textContent = gameDifficulty[diffIndex];
 }
 
-function handlePlayClick(event) {
+// this is called when the player clicks on Play or retry button
+function handleGameStartClick() {
     init();
     startGame();
 }
 
-function handleRetryClick() {
+function handleHomeClick() {
     init();
-    startGame();
 }
 
 function handleKeyPress(event) {
@@ -435,15 +466,9 @@ function handleKeyPress(event) {
     }
 
     // press space to start game
-    if (event.code === 'Space' && !playBtn.classList.contains('hidden')) {
+    if (event.code === 'Space' && !playBtn.classList.contains('hidden') || !retryBtn.classList.contains('hidden')) {
         event.preventDefault();
-        handlePlayClick();
-    }
-
-    // press space to restart game
-    if (event.code === 'Space' && !retryBtn.classList.contains('hidden')) {
-        event.preventDefault();
-        handleRetryClick();
+        handleGameStartClick();
     }
 }
 
@@ -454,8 +479,9 @@ function handleKeyRelease() {
 
 /*----------- Event Listeners ----------*/
 
-playBtn.addEventListener('click', handlePlayClick);
-retryBtn.addEventListener('click', handleRetryClick);
+playBtn.addEventListener('click', handleGameStartClick);
+retryBtn.addEventListener('click', handleGameStartClick);
+homeBtn.addEventListener('click', handleHomeClick);
 diffSection.addEventListener('click', handleDiffClick);
 document.addEventListener('keydown', handleKeyPress)
 document.addEventListener('keyup', handleKeyRelease)
