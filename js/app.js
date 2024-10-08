@@ -37,6 +37,8 @@ const errorMargin = 50; // user margin for each beat in milliseconds
 
 const arrowArray = [];
 
+const mistakeArray = [];
+
 const gameDifficulty = [
     'Easy', 'Normal', 'Hard',
 ]
@@ -55,6 +57,7 @@ let incrementInterval;
 let incrementTimeout;
 let appendArrowTimeout;
 let resetTimeout;
+let keyPressed;
 
 /*----- Cached Element References  -----*/
 
@@ -77,48 +80,69 @@ class Arrow {
         this.y = y; // Y axis on the canvas
         this.dx = velocity; // X velocity
         this.dy = velocity; // Y velocity
-        this.startTimer = performance.now();
-        this.arrowDuration = 1900;
-        this.stopped = false;
+        this.startTimer = performance.now(); // get the time the arrow spawned
+        this.arrowDuration = 1900; // set duration for how long the arrow will stay
+        this.stopped = false; // check if arrow 
         this.hit = false;
+        this.early = false;
         this.arrowType = arrowType;
 
+        // method to draw arrow
         this.draw = function () {
-            ctx.font = "30px Arial"
-            ctx.fillText(this.arrowType, this.x, this.y);
+            if (!this.early) {
+                if (!this.hit) {
+                    ctx.font = "30px Arial"
+                    ctx.fillText(this.arrowType, this.x, this.y);
 
-            ctx.strokeText(this.arrowType, hitX, hitY);
+                    ctx.strokeText(this.arrowType, hitX, hitY);
+                } else {
+                    // render check mark if arrow was hit on time
+                    ctx.save();
+                    ctx.font = "25px Arial";
+                    ctx.fillStyle = 'green';
+                    ctx.fillText("✓", hitX, hitY);
+                    ctx.restore();
+                }
+            } else {
+                // render check mark if arrow was hit on time
+                ctx.save();
+                ctx.font = "25px Arial";
+                ctx.fillStyle = 'red';
+                ctx.fillText("X", hitX, hitY);
+                ctx.restore();
+            }
         }
 
         this.checkBeat = function (keyPress) {
             const time = performance.now();
             const arrowTime = time - this.startTimer;
 
+            // if user presses too early, damage the player
+            if (Math.abs(arrowTime - this.arrowDuration) > 140 && Math.abs(arrowTime - this.arrowDuration) < 300) {
+                this.early = true;
+            }
+
             // check if arrow is hit within frame window
-            if (Math.abs(arrowTime - this.arrowDuration) < 150 && Math.abs(arrowTime - this.arrowDuration) > -100) {
+            if (Math.abs(arrowTime - this.arrowDuration) < 140 && Math.abs(arrowTime - this.arrowDuration) > -140) {
                 // check if arrow matches keypress
                 switch (this.arrowType) {
                     case "↑":
                         if (keyPress === 'ArrowUp') {
-                            console.log('Up arrow hit!');
                             this.hit = true;
                         }
                         break;
                     case "→":
                         if (keyPress === 'ArrowRight') {
-                            console.log('Right arrow hit!');
                             this.hit = true;
                         }
                         break;
                     case "↓":
                         if (keyPress === 'ArrowDown') {
-                            console.log('Down arrow hit!');
                             this.hit = true;
                         }
                         break;
                     case "←":
                         if (keyPress === 'ArrowLeft') {
-                            console.log('Left arrow hit!');
                             this.hit = true;
                         }
                         break;
@@ -128,24 +152,30 @@ class Arrow {
         }
 
         this.update = function () {
+            // if the arrow expired, stop rendering it
             if (this.stopped) {
                 return;
             }
 
+            // move in velocity direction
             this.x += this.dx;
             this.y += this.dy;
 
             // set a time limit for each arrow drawn
             setTimeout(() => {
                 this.stopped = true;
-                if (!this.hit) {
-                    hp -= 10;
-                }
                 return
             }, this.arrowDuration);
 
             this.draw();
         }
+
+        // if player does not hit the arrow when the arrow duration ends, deduct 10 hp
+        setTimeout(() => {
+            if (!this.hit) {
+                hp -= 10;
+            }
+        }, this.arrowDuration);
     }
 }
 
@@ -160,6 +190,7 @@ function init() {
     lose = false;
     retryBtn.classList.add('hidden');
     arrowSpeed = 0;
+    keyPressed = false;
 }
 
 function render() {
@@ -169,10 +200,6 @@ function render() {
 // initalize on load
 init();
 render();
-
-setInterval(() => {
-    console.log(arrowArray);
-}, 1000);
 
 // function to start the game
 function startGame() {
@@ -199,19 +226,27 @@ function startGame() {
 }
 
 function gameWin() {
-    playBtn.classList.remove('hidden');
+    // display difficulty section and play button
     diffSection.classList.remove('hidden');
+    playBtn.classList.remove('hidden');
     victory = true;
+    // stop all intervals
+    clearAllIntAndTimeout();
 }
 
 // function to stop game and display a game over screen
 function gameOver() {
     diffSection.classList.remove('hidden');
+    // add a 1.8s timer to show the retry button to avoid game breaking bug when restarting the level too quickly
     setTimeout(() => {
         retryBtn.classList.remove('hidden');
     }, 1800)
     lose = true;
-    // clear all intervals and timeouts to prevent bugs when restarting the game
+    // clear all intervals
+    clearAllIntAndTimeout();
+}
+
+function clearAllIntAndTimeout() {
     clearInterval(game);
     clearInterval(incrementInterval);
     clearTimeout(incrementTimeout);
@@ -224,16 +259,7 @@ function drawGame() {
     // clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    ctx.save();
-
-    // draw health bar
-    ctx.fillStyle = 'green';
-    ctx.fillRect(canvas.width / 20 - 15, (canvas.height / 20), (hp * 2), 18);
-    // draw health bar border
-    ctx.strokeStyle = 'black';
-    ctx.strokeRect(canvas.width / 20 - 15, (canvas.height / 20), 200, 18);
-
-    ctx.restore();
+    drawHealthBar();
 
     //render arrows
     if (arrowArray.length) {
@@ -248,6 +274,21 @@ function drawGame() {
 
     // repeat animation
     requestAnimationFrame(drawGame)
+}
+
+function drawHealthBar() {
+    ctx.save();
+
+    // draw health bar
+    ctx.fillStyle = 'green';
+    ctx.fillRect(canvas.width / 20 - 15, (canvas.height / 20), (hp * 2), 18);
+    ctx.font = '15px Arial';
+    ctx.fillText(`${hp}/100`, canvas.width / 20 + 190, (canvas.height / 20 + 13));
+    // draw health bar border
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(canvas.width / 20 - 15, (canvas.height / 20), 200, 18);
+
+    ctx.restore();
 }
 
 // function to call update each animation for each arrow 
@@ -314,7 +355,6 @@ function drawArrow(arr) {
     ));
 }
 
-
 // function to handle difficulty change click
 function handleDiffClick(event) {
     // check which button was clicked on
@@ -339,6 +379,7 @@ function handleDiffClick(event) {
 }
 
 function handlePlayClick(event) {
+    init();
     startGame();
 }
 
@@ -348,17 +389,44 @@ function handleRetryClick() {
 }
 
 function handleKeyPress(event) {
-    // check for each arrow pressed
-    arrowArray.forEach(arr => {
-        if (!arr.stopped) {
-            arr.checkBeat(event.code);
+    // when game is playing, prevent default of arrows to prevent the window from scrolling with the arrow keys
+    if (playBtn.classList.contains('hidden') && retryBtn.classList.contains('hidden')) {
+        if (event.code === "ArrowUp" ||
+            event.code === "ArrowRight" ||
+            event.code === "ArrowDown" ||
+            event.code === "ArrowLeft") {
+            event.preventDefault();
         }
-    })
+    }
+
+    // if keyPressed is false, check for arrow input.
+    // this is used to prevent the user from holding down arrow key ahead of time
+    if (!keyPressed) {
+        keyPressed = true;
+        // check beat for every arrow available
+        arrowArray.forEach(arr => {
+            if (!arr.stopped) {
+                arr.checkBeat(event.code);
+            }
+        })
+    }
+
+    // press space to start game
+    if (event.code === 'Space' && !playBtn.classList.contains('hidden')) {
+        event.preventDefault();
+        handlePlayClick();
+    }
 
     // press space to restart game
     if (event.code === 'Space' && !retryBtn.classList.contains('hidden')) {
+        event.preventDefault();
         handleRetryClick();
     }
+}
+
+// release key
+function handleKeyRelease() {
+    keyPressed = false;
 }
 
 /*----------- Event Listeners ----------*/
@@ -367,3 +435,4 @@ playBtn.addEventListener('click', handlePlayClick);
 retryBtn.addEventListener('click', handleRetryClick);
 diffSection.addEventListener('click', handleDiffClick);
 document.addEventListener('keydown', handleKeyPress)
+document.addEventListener('keyup', handleKeyRelease)
