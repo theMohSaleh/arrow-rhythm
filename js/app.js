@@ -14,16 +14,22 @@ const levelCombos = [
         { arrow: "↓", startPos: { x: 320, y: 180 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
     ],
     [
-        { arrow: "↑", startPos: { x: 140, y: 90 }, hitPos: { x: 210, y: 150 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 100, y: 90 }, hitPos: { x: 200, y: 150 }, velocity: 1 },
-        { arrow: "↓", startPos: { x: 160, y: 90 }, hitPos: { x: 260, y: 150 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 120, y: 90 }, hitPos: { x: 220, y: 150 }, velocity: 1 },
+        { arrow: "↑", startPos: { x: 140, y: 90 }, hitPos: { x: 250, y: 200 }, velocity: 1 },
+        { arrow: "→", startPos: { x: 100, y: 90 }, hitPos: { x: 210, y: 200 }, velocity: 1 },
+        { arrow: "↓", startPos: { x: 160, y: 90 }, hitPos: { x: 270, y: 200 }, velocity: 1 },
+        { arrow: "←", startPos: { x: 120, y: 90 }, hitPos: { x: 230, y: 200 }, velocity: 1 },
     ],
     [
         { arrow: "↑", startPos: { x: 140, y: 20 }, hitPos: { x: 250, y: 130 }, velocity: 1 },
         { arrow: "→", startPos: { x: 100, y: 20 }, hitPos: { x: 210, y: 130 }, velocity: 1 },
         { arrow: "↓", startPos: { x: 160, y: 20 }, hitPos: { x: 270, y: 130 }, velocity: 1 },
         { arrow: "→", startPos: { x: 120, y: 20 }, hitPos: { x: 230, y: 130 }, velocity: 1 },
+    ],
+    [
+        { arrow: "↑", startPos: { x: 360, y: 260 }, hitPos: { x: 250, y: 150 }, velocity: -1 },
+        { arrow: "→", startPos: { x: 130, y: 40 }, hitPos: { x: 240, y: 150 }, velocity: 1 },
+        { arrow: "↓", startPos: { x: 140, y: 40 }, hitPos: { x: 250, y: 150 }, velocity: 1 },
+        { arrow: "←", startPos: { x: 350, y: 260 }, hitPos: { x: 240, y: 150 }, velocity: -1 },
     ],
 ]
 
@@ -41,11 +47,14 @@ const gameDifficulty = [
 let hp;
 let arrCount;
 let diffIndex;
+let victory;
 let lose;
 let arrowSpeed;
 let game;
 let incrementInterval;
 let incrementTimeout;
+let appendArrowTimeout;
+let resetTimeout;
 
 /*----- Cached Element References  -----*/
 
@@ -71,7 +80,7 @@ class Arrow {
         this.startTimer = performance.now();
         this.arrowDuration = 1900;
         this.stopped = false;
-        this.missed = false;
+        this.hit = false;
         this.arrowType = arrowType;
 
         this.draw = function () {
@@ -81,13 +90,39 @@ class Arrow {
             ctx.strokeText(this.arrowType, hitX, hitY);
         }
 
-        this.checkBeat = function () {
+        this.checkBeat = function (keyPress) {
             const time = performance.now();
-            const arrowTime = time - this.startTimer;            
-            
-            if (Math.abs(arrowTime - this.arrowDuration) < 200 && Math.abs(arrowTime - this.arrowDuration) > -100) {
-                console.log(Math.abs(arrowTime));
-                console.log("arrow hit");
+            const arrowTime = time - this.startTimer;
+
+            // check if arrow is hit within frame window
+            if (Math.abs(arrowTime - this.arrowDuration) < 150 && Math.abs(arrowTime - this.arrowDuration) > -100) {
+                // check if arrow matches keypress
+                switch (this.arrowType) {
+                    case "↑":
+                        if (keyPress === 'ArrowUp') {
+                            console.log('Up arrow hit!');
+                            this.hit = true;
+                        }
+                        break;
+                    case "→":
+                        if (keyPress === 'ArrowRight') {
+                            console.log('Right arrow hit!');
+                            this.hit = true;
+                        }
+                        break;
+                    case "↓":
+                        if (keyPress === 'ArrowDown') {
+                            console.log('Down arrow hit!');
+                            this.hit = true;
+                        }
+                        break;
+                    case "←":
+                        if (keyPress === 'ArrowLeft') {
+                            console.log('Left arrow hit!');
+                            this.hit = true;
+                        }
+                        break;
+                }
                 return;
             }
         }
@@ -103,6 +138,9 @@ class Arrow {
             // set a time limit for each arrow drawn
             setTimeout(() => {
                 this.stopped = true;
+                if (!this.hit) {
+                    hp -= 10;
+                }
                 return
             }, this.arrowDuration);
 
@@ -118,6 +156,7 @@ function init() {
     if (!diffIndex) {
         diffIndex = 0;
     }
+    victory = false;
     lose = false;
     retryBtn.classList.add('hidden');
     arrowSpeed = 0;
@@ -130,6 +169,10 @@ function render() {
 // initalize on load
 init();
 render();
+
+setInterval(() => {
+    console.log(arrowArray);
+}, 1000);
 
 // function to start the game
 function startGame() {
@@ -155,14 +198,25 @@ function startGame() {
     renderArrows(0);
 }
 
+function gameWin() {
+    playBtn.classList.remove('hidden');
+    diffSection.classList.remove('hidden');
+    victory = true;
+}
+
 // function to stop game and display a game over screen
 function gameOver() {
     diffSection.classList.remove('hidden');
-    retryBtn.classList.remove('hidden');
+    setTimeout(() => {
+        retryBtn.classList.remove('hidden');
+    }, 1800)
     lose = true;
+    // clear all intervals and timeouts to prevent bugs when restarting the game
     clearInterval(game);
     clearInterval(incrementInterval);
     clearTimeout(incrementTimeout);
+    clearTimeout(appendArrowTimeout);
+    clearTimeout(resetTimeout);
 }
 
 // function to draw and update the canvas
@@ -227,7 +281,7 @@ function renderArrows(comboIdx) {
 
     // wait 1 second and then spawn next arrow
     combo.forEach((arr, index) => {
-        setTimeout(() => {
+        appendArrowTimeout = setTimeout(() => {
             drawArrow(arr);
         }, delay);
         delay += 1000;
@@ -236,10 +290,15 @@ function renderArrows(comboIdx) {
     clearInterval(incrementInterval);
 
     // after the previous foreach ends, wait 2 seconds and then reinvoke this function to start next combo
-    setTimeout(() => {
+    resetTimeout = setTimeout(() => {
         // if there are more combos, start next combo
         if (comboIdx < levelCombos.length - 1 && !lose) {
             renderArrows(comboIdx + 1)
+        } else {
+            // if there are no more combo levels and player did not lose all their health, the player wins
+            if (hp > 0) {
+                gameWin();
+            }
         }
     }, delay + 2000);
 }
@@ -251,7 +310,7 @@ function drawArrow(arr) {
         arr.startPos.y,
         arr.hitPos.x,
         arr.hitPos.y,
-        arr.velocity * arrowSpeed,
+        arr.velocity * arrowSpeed, // increase by set speed depending on difficulty
     ));
 }
 
@@ -289,12 +348,16 @@ function handleRetryClick() {
 }
 
 function handleKeyPress(event) {
-    if (event.code === 'Space') {
-        arrowArray.forEach(arr => {
-            if (!arr.stopped) {
-                arr.checkBeat();
-            }
-        })
+    // check for each arrow pressed
+    arrowArray.forEach(arr => {
+        if (!arr.stopped) {
+            arr.checkBeat(event.code);
+        }
+    })
+
+    // press space to restart game
+    if (event.code === 'Space' && !retryBtn.classList.contains('hidden')) {
+        handleRetryClick();
     }
 }
 
