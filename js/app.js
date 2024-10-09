@@ -1,38 +1,40 @@
 /*-------------- Constants -------------*/
 
+// const levelCombos = require('./levels.js');
+
 // the set of combos in each level
-const levelCombos = [
-    [
-        { arrow: "→", startPos: { x: 100, y: 50 }, hitPos: { x: 210, y: 160 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 140, y: 50 }, hitPos: { x: 250, y: 160 }, velocity: 1 },
-        { arrow: "↑", startPos: { x: 180, y: 50 }, hitPos: { x: 290, y: 160 }, velocity: 1 },
-        { arrow: "↓", startPos: { x: 210, y: 50 }, hitPos: { x: 320, y: 160 }, velocity: 1 },
-    ],
-    [
-        { arrow: "→", startPos: { x: 210, y: 180 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
-        { arrow: "→", startPos: { x: 250, y: 180 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
-        { arrow: "↑", startPos: { x: 290, y: 180 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
-        { arrow: "↓", startPos: { x: 320, y: 180 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
-    ],
-    [
-        { arrow: "↑", startPos: { x: 140, y: 90 }, hitPos: { x: 250, y: 200 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 100, y: 90 }, hitPos: { x: 210, y: 200 }, velocity: 1 },
-        { arrow: "↓", startPos: { x: 160, y: 90 }, hitPos: { x: 270, y: 200 }, velocity: 1 },
-        { arrow: "←", startPos: { x: 120, y: 90 }, hitPos: { x: 230, y: 200 }, velocity: 1 },
-    ],
-    [
-        { arrow: "↑", startPos: { x: 140, y: 20 }, hitPos: { x: 250, y: 130 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 100, y: 20 }, hitPos: { x: 210, y: 130 }, velocity: 1 },
-        { arrow: "↓", startPos: { x: 160, y: 20 }, hitPos: { x: 270, y: 130 }, velocity: 1 },
-        { arrow: "→", startPos: { x: 120, y: 20 }, hitPos: { x: 230, y: 130 }, velocity: 1 },
-    ],
-    [
-        { arrow: "↑", startPos: { x: 360, y: 260 }, hitPos: { x: 250, y: 150 }, velocity: -1 },
-        { arrow: "→", startPos: { x: 130, y: 40 }, hitPos: { x: 240, y: 150 }, velocity: 1 },
-        { arrow: "↓", startPos: { x: 140, y: 40 }, hitPos: { x: 250, y: 150 }, velocity: 1 },
-        { arrow: "←", startPos: { x: 350, y: 260 }, hitPos: { x: 240, y: 150 }, velocity: -1 },
-    ],
-]
+// const levelCombos = [
+//     [
+//         { arrow: "→", startPos: { x: 100, y: 50 }, hitPos: { x: 210, y: 160 }, velocity: 1 },
+//         { arrow: "→", startPos: { x: 140, y: 50 }, hitPos: { x: 250, y: 160 }, velocity: 1 },
+//         { arrow: "↑", startPos: { x: 180, y: 50 }, hitPos: { x: 290, y: 160 }, velocity: 1 },
+//         { arrow: "↓", startPos: { x: 210, y: 50 }, hitPos: { x: 320, y: 160 }, velocity: 1 },
+//     ],
+//     [
+//         { arrow: "→", startPos: { x: 210, y: 180 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
+//         { arrow: "→", startPos: { x: 250, y: 180 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
+//         { arrow: "↑", startPos: { x: 290, y: 180 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
+//         { arrow: "↓", startPos: { x: 320, y: 180 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
+//     ],
+//     [
+//         { arrow: "↑", startPos: { x: 140, y: 90 }, hitPos: { x: 250, y: 200 }, velocity: 1 },
+//         { arrow: "→", startPos: { x: 100, y: 90 }, hitPos: { x: 210, y: 200 }, velocity: 1 },
+//         { arrow: "↓", startPos: { x: 160, y: 90 }, hitPos: { x: 270, y: 200 }, velocity: 1 },
+//         { arrow: "←", startPos: { x: 120, y: 90 }, hitPos: { x: 230, y: 200 }, velocity: 1 },
+//     ],
+//     [
+//         { arrow: "↑", startPos: { x: 140, y: 20 }, hitPos: { x: 250, y: 130 }, velocity: 1 },
+//         { arrow: "→", startPos: { x: 100, y: 20 }, hitPos: { x: 210, y: 130 }, velocity: 1 },
+//         { arrow: "↓", startPos: { x: 160, y: 20 }, hitPos: { x: 270, y: 130 }, velocity: 1 },
+//         { arrow: "→", startPos: { x: 120, y: 20 }, hitPos: { x: 230, y: 130 }, velocity: 1 },
+//     ],
+//     [
+//         { arrow: "↑", startPos: { x: 360, y: 260 }, hitPos: { x: 250, y: 150 }, velocity: -1 },
+//         { arrow: "→", startPos: { x: 130, y: 40 }, hitPos: { x: 240, y: 150 }, velocity: 1 },
+//         { arrow: "↓", startPos: { x: 140, y: 40 }, hitPos: { x: 250, y: 150 }, velocity: 1 },
+//         { arrow: "←", startPos: { x: 350, y: 260 }, hitPos: { x: 240, y: 150 }, velocity: -1 },
+//     ],
+// ]
 
 const errorMargin = 50; // user margin for each beat in milliseconds
 
@@ -57,6 +59,11 @@ let incrementTimeout;
 let appendArrowTimeout;
 let resetTimeout;
 let keyPressed;
+let comboStartIdx;
+let comboEndIdx;
+let arrowSpawnRate;
+let comboSpawnRate;
+let arrowDuration;
 
 /*----- Cached Element References  -----*/
 
@@ -75,13 +82,13 @@ const ctx = canvas.getContext("2d"); // used for styling and drawing
 
 // arrow class that represents each arrow drawn on the screen
 class Arrow {
-    constructor(arrowType, x, y, hitX, hitY, velocity) {
+    constructor(arrowType, x, y, hitX, hitY, velocity, duration) {
         this.x = x; // X axis on the canvas
         this.y = y; // Y axis on the canvas
         this.dx = velocity; // X velocity
         this.dy = velocity; // Y velocity
         this.startTimer = performance.now(); // get the time the arrow spawned
-        this.arrowDuration = 1900; // set duration for how long the arrow will stay
+        this.arrowDuration = duration; // set duration for how long the arrow will stay
         this.stopped = false; // check if arrow 
         this.hit = false;
         this.early = false;
@@ -187,6 +194,9 @@ class Arrow {
 function init() {
     hp = 100;
     arrCount = 0;
+    arrowSpawnRate = 0;
+    comboSpawnRate = 0;
+    arrowDuration = 0;
     // on first initialize, set index to 0
     if (!diffIndex) {
         diffIndex = 0;
@@ -206,28 +216,37 @@ function init() {
 function render() {
     diffText.textContent = gameDifficulty[diffIndex];
     // clear canvas
-    ctx.font = '50px Arial';
+    ctx.font = 'bold 50px Rajdhani';
+    let winMsg = '';
     if (victory) {
         ctx.save();
         ctx.fillStyle = 'green';
-        ctx.fillText("You Win!", canvas.width / 3 - 20, canvas.height / 2);
+        if (hp === 100) {
+            winMsg = 'Perfect!'
+        } else {
+            winMsg = 'You Win!'
+        }
+        ctx.fillText(winMsg, canvas.width / 3, canvas.height / 1.8 - 20);
+        ctx.font = 'bold 40px Rajdhani';
+        ctx.fillText(`${gameDifficulty[diffIndex]} Level Complete`, canvas.width / 5, canvas.height / 1.8 + 20);
 
         ctx.restore();
     } else if (lose) {
         ctx.save();
 
         ctx.fillStyle = 'red';
-        ctx.fillText("Game Over", canvas.width / 3 - 40, canvas.height / 2 - 25);
-        ctx.fillText("You lose!", canvas.width / 3 - 20, canvas.height / 2 + 25);
+        ctx.fillText("Game Over", canvas.width / 3 - 10, canvas.height / 1.8 - 20);
+        ctx.font = 'bold 40px Rajdhani';
+        ctx.fillText("You lose!", canvas.width / 3 + 25, canvas.height / 1.8 + 20);
 
         ctx.restore();
     } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.save();
-        ctx.font = '16px Arial';
-        ctx.fillText(InstructionsMsg[0], 10, 30);
-        ctx.fillText(InstructionsMsg[1], 10, 60);
-        ctx.fillText(InstructionsMsg[2], 10, 90);
+        ctx.font = '20px Rajdhani';
+        ctx.fillText('Hit the arrows on time', 10, 30);
+        ctx.fillText('Select the difficulty', 10, 90);
+        ctx.fillText('Click on play or press the spacebar to begin', 10, 60);
 
         ctx.restore();
     }
@@ -245,21 +264,39 @@ function startGame() {
         arrowArray.pop();
     }
 
-    switch (gameDifficulty[diffIndex]) {
-        case 'Easy':
+    switch (diffIndex) {
+        case 0:
             arrowSpeed = 1;
+            arrowSpawnRate = 1000;
+            comboSpawnRate = 1900;
+            comboStartIdx = 0;
+            comboEndIdx = 11;
+            arrowDuration = 1900;
+            console.log('easy');
             break;
-        case 'Normal':
+        case 1:
             arrowSpeed = 2;
+            arrowSpawnRate = 600;
+            comboSpawnRate = 1500;
+            comboStartIdx = 12;
+            comboEndIdx = 29;
+            arrowDuration = 1500;
+            console.log('normal');
             break;
-        case 'Hard':
+        case 2:
             arrowSpeed = 3;
+            arrowSpawnRate = 400;
+            comboSpawnRate = 900;
+            comboStartIdx = 30;
+            comboEndIdx = 60;
+            arrowDuration = 900;
+            console.log('hard');
             break;
     }
     // render game canvas
     drawGame();
     // start level combos
-    renderArrows(0);
+    renderArrows(comboStartIdx);
 }
 
 // function to display victory screen
@@ -341,19 +378,35 @@ function drawHealthBar() {
 
 // function to call update each animation for each arrow 
 function updateArrows() {
-    // spawn 3 arrows at max each time
+    // spawn 5 arrows at max each time
     let arrow1 = arrowArray[arrCount];
     let arrow2 = arrowArray[arrCount + 1];
     let arrow3 = arrowArray[arrCount + 2];
+    let arrow4 = arrowArray[arrCount + 3];
+    let arrow5 = arrowArray[arrCount + 4];
+    let arrow6 = arrowArray[arrCount + 5];
+    let arrow7 = arrowArray[arrCount + 6];
     // only call update if arrow exists
     if (arrow1) {
-        arrowArray[arrCount].update();
+        arrow1.update();
     }
     if (arrow2) {
-        arrowArray[arrCount + 1].update();
+        arrow2.update();
     }
     if (arrow3) {
-        arrowArray[arrCount + 2].update();
+        arrow3.update();
+    }
+    if (arrow4) {
+        arrow4.update();
+    }
+    if (arrow5) {
+        arrow5.update();
+    }
+    if (arrow6) {
+        arrow6.update();
+    }
+    if (arrow7) {
+        arrow7.update();
     }
 }
 
@@ -362,22 +415,22 @@ function updateArrows() {
 function renderArrows(comboIdx) {
     // get the set combo in the level combos array
     const combo = levelCombos[comboIdx];
-    let delay = 0 // delay to the arrows to spawn
+    let delay = 0 // delay for the arrows to spawn
 
     // increase count to move array that spawns the arrows every 1.9 seconds
     incrementTimeout = setTimeout(() => {
         // increase count every 1 second
         incrementInterval = setInterval(() => {
             arrCount++;
-        }, 1000);
-    }, 1900);
+        }, arrowSpawnRate);
+    }, comboSpawnRate);
 
     // wait 1 second and then spawn next arrow
     combo.forEach((arr, index) => {
         appendArrowTimeout = setTimeout(() => {
             drawArrow(arr);
         }, delay);
-        delay += 1000;
+        delay += arrowSpawnRate;
     });
 
     // reset previous increment interval
@@ -385,8 +438,9 @@ function renderArrows(comboIdx) {
 
     // after the previous foreach ends, wait 2 seconds and then reinvoke this function to start next combo
     resetTimeout = setTimeout(() => {
+
         // if there are more combos, start next combo
-        if (comboIdx < levelCombos.length - 1 && !lose) {
+        if (comboIdx < comboEndIdx && !lose) {
             renderArrows(comboIdx + 1)
         } else {
             // if there are no more combo levels and player did not lose all their health, the player wins
@@ -406,6 +460,7 @@ function drawArrow(arr) {
         arr.hitPos.x,
         arr.hitPos.y,
         arr.velocity * arrowSpeed, // increase by set speed depending on difficulty
+        arrowDuration,
     ));
 }
 
@@ -470,6 +525,15 @@ function handleKeyPress(event) {
         event.preventDefault();
         handleGameStartClick();
     }
+
+    // press space to quick retry
+    // if (event.code === 'Space' && playBtn.classList.contains('hidden') && retryBtn.classList.contains('hidden')) {
+    //     event.preventDefault();
+    //     clearAllIntAndTimeout();
+    //     setTimeout(() => {
+    //         handleGameStartClick();
+    //     }, 1000)
+    // }
 }
 
 // release key

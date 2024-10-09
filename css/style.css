@@ -65,7 +65,7 @@ button {
 }
 
 .gameContainer {
-    border: 2px solid black;
+    border: 6px solid black;
 }
 
 @media screen and (width > 1200px) {
