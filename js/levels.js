@@ -198,5 +198,23 @@ const levelCombos = [
         { arrow: "→", startPos: { x: 275, y: 55 }, hitPos: { x: 450, y: 230 }, velocity: 1 },
     ],
     
-    // Hard Level
+    // Hard Level - 250 difference in coordinates
+    [
+        { arrow: "→", startPos: { x: 275, y: 245 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
+        { arrow: "←", startPos: { x: 315, y: 245 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
+        { arrow: "↑", startPos: { x: 355, y: 245 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
+        { arrow: "↓", startPos: { x: 385, y: 245 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
+    ],
+    [
+        { arrow: "→", startPos: { x: 275, y: 245 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
+        { arrow: "←", startPos: { x: 315, y: 245 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
+        { arrow: "↑", startPos: { x: 355, y: 245 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
+        { arrow: "↓", startPos: { x: 385, y: 245 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
+    ],
+    [
+        { arrow: "→", startPos: { x: 275, y: 245 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
+        { arrow: "←", startPos: { x: 315, y: 245 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
+        { arrow: "↑", startPos: { x: 355, y: 245 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
+        { arrow: "↓", startPos: { x: 385, y: 245 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
+    ],
 ]

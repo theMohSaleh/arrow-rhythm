@@ -285,11 +285,11 @@ function startGame() {
             break;
         case 2:
             arrowSpeed = 3;
-            arrowSpawnRate = 400;
-            comboSpawnRate = 900;
-            comboStartIdx = 30;
-            comboEndIdx = 60;
-            arrowDuration = 900;
+            arrowSpawnRate = 300;
+            comboSpawnRate = 2000;
+            comboStartIdx = 19;
+            comboEndIdx = 30;
+            arrowDuration = 1700;
             console.log('hard');
             break;
     }
@@ -311,12 +311,12 @@ function gameWin() {
 
 // function to stop game and display a game over screen
 function gameOver() {
+    lose = true;
     // add a 1.8s timer to show the retry button to avoid game breaking bug when restarting the level too quickly
     setTimeout(() => {
         retryBtn.classList.remove('hidden');
         homeBtn.classList.remove('hidden');
     }, 1800)
-    lose = true;
     // clear all intervals
     clearAllIntAndTimeout();
     render();
@@ -425,9 +425,10 @@ function renderArrows(comboIdx) {
         }, arrowSpawnRate);
     }, comboSpawnRate);
 
-    // wait 1 second and then spawn next arrow
+    // wait to spawn next arrow depending on difficulty
     combo.forEach((arr, index) => {
         appendArrowTimeout = setTimeout(() => {
+            console.log('drawing arrow');
             drawArrow(arr);
         }, delay);
         delay += arrowSpawnRate;
