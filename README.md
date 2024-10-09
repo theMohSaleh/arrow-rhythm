@@ -1,5 +1,5 @@
 ## Arrow Rhythm
-### Game Idea and 
+### Game Idea
 A rhythm game where the player needs to use the arrow keys and press the corresponding arrows that appear on the screen in the correct order and timing.
 
 ![Main Menu](./plan/Untitled-2024-10-01-0944.png)
@@ -56,18 +56,45 @@ As a user in this game, I want
 // call init and gameStart when the user clicks on retry
 
 ### Landing Page
-![Main Menu](./assets/home.png)
+Read the instructions to get an idea of how the game works. Afterwards, cycle through the available difficulties and click on the play button to begin (alternatively, press spacebar on the keyboard to start).
 
 ![Main Menu](./assets/home.png)
+
+### Playing the game
+
+#### Game Rules
+The player will have to press on the arrow keys on their keyboard for each arrow on the screen when they align up with their shadow part.
+For example, when the filled → aligns with the outlined → , Press the Right Arrow key to hit the arrow on beat!
 
 ![Game Start](./assets/start.png)
 
-![Game Start](./assets/health.png)
+#### Successful Arrow Hit
+When the arrow is hit correclty, a very brief **green checkmark** will appear to indicate a successfully timed arrow press!
 
 ![Game Start](./assets/correct.png)
 
+#### Early Arrow Hit
+When pressing the arrow key too early, a **red X** will appear to indicate that the arrow was pressed to early and will not count as a successful arrow hit.
+
 ![Game Start](./assets/early.png)
 
+#### Healthbar
+The player's healthbar is displayed on the top left of the game's border. The health points of the player is 100 and resets every time a new game starts.
+
+Each unsuccessful arrow hits (either early hits or missed hits) will deduct 10 HP from the player. This means that the player is only allowed to have at most 9 **unsuccessful** arrow hits throughout the entire level to still be able to win the game. When reaching 10 failed arrow hits the game will end lt in a defeat. 
+
+![Game Start](./assets/health.png)
+
+#### Victory
+When all the set arrows are expired for the level, the game will end in victory if the player has more than 0 health remaining at the end of the level.
+
+Additionally, the victory text message changes if the player survived the entire level with full health!
+
 ![Game Start](./assets/victory.png)
+
+#### Defeat
+Upon losing all health, the player will be shown a Game Over screen. During the intial display of this screen, the retry and home buttons will be displayed with a slight delay due to technical issues.
+
+Cicking on Retry or pressing the spacebar will restart the level with the same selected difficulty
 
 ![Game Start](./assets/lose.png)
