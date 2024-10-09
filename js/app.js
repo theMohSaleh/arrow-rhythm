@@ -266,7 +266,7 @@ function startGame() {
 
     switch (diffIndex) {
         case 0:
-            arrowSpeed = 1;
+            arrowSpeed = 0.42; // 1 for 60fps 0.42 for 144fps
             arrowSpawnRate = 1000;
             comboSpawnRate = 1900;
             comboStartIdx = 0;
@@ -275,7 +275,7 @@ function startGame() {
             console.log('easy');
             break;
         case 1:
-            arrowSpeed = 2;
+            arrowSpeed = 0.82;
             arrowSpawnRate = 600;
             comboSpawnRate = 1500;
             comboStartIdx = 12;
@@ -284,7 +284,7 @@ function startGame() {
             console.log('normal');
             break;
         case 2:
-            arrowSpeed = 3;
+            arrowSpeed = 0.74;
             arrowSpawnRate = 300;
             comboSpawnRate = 2000;
             comboStartIdx = 19;
