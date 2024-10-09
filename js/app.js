@@ -1,48 +1,10 @@
 /*-------------- Constants -------------*/
 
-// const levelCombos = require('./levels.js');
-
-// the set of combos in each level
-// const levelCombos = [
-//     [
-//         { arrow: "→", startPos: { x: 100, y: 50 }, hitPos: { x: 210, y: 160 }, velocity: 1 },
-//         { arrow: "→", startPos: { x: 140, y: 50 }, hitPos: { x: 250, y: 160 }, velocity: 1 },
-//         { arrow: "↑", startPos: { x: 180, y: 50 }, hitPos: { x: 290, y: 160 }, velocity: 1 },
-//         { arrow: "↓", startPos: { x: 210, y: 50 }, hitPos: { x: 320, y: 160 }, velocity: 1 },
-//     ],
-//     [
-//         { arrow: "→", startPos: { x: 210, y: 180 }, hitPos: { x: 100, y: 70 }, velocity: -1 },
-//         { arrow: "→", startPos: { x: 250, y: 180 }, hitPos: { x: 140, y: 70 }, velocity: -1 },
-//         { arrow: "↑", startPos: { x: 290, y: 180 }, hitPos: { x: 180, y: 70 }, velocity: -1 },
-//         { arrow: "↓", startPos: { x: 320, y: 180 }, hitPos: { x: 210, y: 70 }, velocity: -1 },
-//     ],
-//     [
-//         { arrow: "↑", startPos: { x: 140, y: 90 }, hitPos: { x: 250, y: 200 }, velocity: 1 },
-//         { arrow: "→", startPos: { x: 100, y: 90 }, hitPos: { x: 210, y: 200 }, velocity: 1 },
-//         { arrow: "↓", startPos: { x: 160, y: 90 }, hitPos: { x: 270, y: 200 }, velocity: 1 },
-//         { arrow: "←", startPos: { x: 120, y: 90 }, hitPos: { x: 230, y: 200 }, velocity: 1 },
-//     ],
-//     [
-//         { arrow: "↑", startPos: { x: 140, y: 20 }, hitPos: { x: 250, y: 130 }, velocity: 1 },
-//         { arrow: "→", startPos: { x: 100, y: 20 }, hitPos: { x: 210, y: 130 }, velocity: 1 },
-//         { arrow: "↓", startPos: { x: 160, y: 20 }, hitPos: { x: 270, y: 130 }, velocity: 1 },
-//         { arrow: "→", startPos: { x: 120, y: 20 }, hitPos: { x: 230, y: 130 }, velocity: 1 },
-//     ],
-//     [
-//         { arrow: "↑", startPos: { x: 360, y: 260 }, hitPos: { x: 250, y: 150 }, velocity: -1 },
-//         { arrow: "→", startPos: { x: 130, y: 40 }, hitPos: { x: 240, y: 150 }, velocity: 1 },
-//         { arrow: "↓", startPos: { x: 140, y: 40 }, hitPos: { x: 250, y: 150 }, velocity: 1 },
-//         { arrow: "←", startPos: { x: 350, y: 260 }, hitPos: { x: 240, y: 150 }, velocity: -1 },
-//     ],
-// ]
-
-const errorMargin = 50; // user margin for each beat in milliseconds
-
 const arrowArray = []; // used to show which arrows to currently display
 
 // available game difficulties
 const gameDifficulty = [
-    'Easy', 'Normal', 'Hard',
+    'Normal', 'Hard',
 ]
 
 /*---------- Variables (state) ---------*/
@@ -89,7 +51,7 @@ class Arrow {
         this.dy = velocity; // Y velocity
         this.startTimer = performance.now(); // get the time the arrow spawned
         this.arrowDuration = duration; // set duration for how long the arrow will stay
-        this.stopped = false; // check if arrow 
+        this.stopped = false;
         this.hit = false;
         this.early = false;
         this.arrowType = arrowType;
@@ -218,6 +180,7 @@ function render() {
     // clear canvas
     ctx.font = 'bold 50px Rajdhani';
     let winMsg = '';
+    // if player wins
     if (victory) {
         ctx.save();
         ctx.fillStyle = 'green';
@@ -231,6 +194,7 @@ function render() {
         ctx.fillText(`${gameDifficulty[diffIndex]} Level Complete`, canvas.width / 5, canvas.height / 1.8 + 20);
 
         ctx.restore();
+        // if player loses
     } else if (lose) {
         ctx.save();
 
@@ -240,13 +204,19 @@ function render() {
         ctx.fillText("You lose!", canvas.width / 3 + 25, canvas.height / 1.8 + 20);
 
         ctx.restore();
+        // when in home screen
     } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.save();
-        ctx.font = '20px Rajdhani';
-        ctx.fillText('Hit the arrows on time', 10, 30);
-        ctx.fillText('Select the difficulty', 10, 90);
-        ctx.fillText('Click on play or press the spacebar to begin', 10, 60);
+        ctx.font = 'bold 17px Rajdhani';
+        ctx.fillText('Welcome to Arrow Ryhthm! The objective of this game is to time your', 10, 30);
+        ctx.fillText('key presses when the arrow aligns with the outlined arrow.', 10, 60);
+        ctx.font = 'bold 14px Rajdhani';
+        ctx.fillText('Press the correct arrow keys ↑ → ↓ ← on your keyboard when the arrow is aligned.', 10, 90);
+        ctx.fillText('Avoid pressing too early or too late to not lose health!', 10, 120);
+        ctx.font = 'bold 17px Rajdhani';
+        ctx.fillText('Begin by selecting the desired difficulty below.', 10, 170);
+        ctx.fillText('Click on Play button or press the spacebar on your keyboard to begin!', 10, 200);
 
         ctx.restore();
     }
@@ -266,31 +236,20 @@ function startGame() {
 
     switch (diffIndex) {
         case 0:
-            arrowSpeed = 0.42; // 1 for 60fps 0.42 for 144fps
+            arrowSpeed = 1; // 1 for 60fps 0.42 for 144fps
             arrowSpawnRate = 1000;
             comboSpawnRate = 1900;
             comboStartIdx = 0;
-            comboEndIdx = 11;
+            comboEndIdx = 15;
             arrowDuration = 1900;
-            console.log('easy');
             break;
         case 1:
-            arrowSpeed = 0.82;
+            arrowSpeed = 2; // 0.82 on 144fps
             arrowSpawnRate = 600;
             comboSpawnRate = 1500;
-            comboStartIdx = 12;
-            comboEndIdx = 18;
+            comboStartIdx = 16;
+            comboEndIdx = 35;
             arrowDuration = 1500;
-            console.log('normal');
-            break;
-        case 2:
-            arrowSpeed = 0.74;
-            arrowSpawnRate = 300;
-            comboSpawnRate = 2000;
-            comboStartIdx = 19;
-            comboEndIdx = 30;
-            arrowDuration = 1700;
-            console.log('hard');
             break;
     }
     // render game canvas
@@ -378,7 +337,7 @@ function drawHealthBar() {
 
 // function to call update each animation for each arrow 
 function updateArrows() {
-    // spawn 5 arrows at max each time
+    // spawn 7 arrows at max each time
     let arrow1 = arrowArray[arrCount];
     let arrow2 = arrowArray[arrCount + 1];
     let arrow3 = arrowArray[arrCount + 2];
@@ -417,9 +376,9 @@ function renderArrows(comboIdx) {
     const combo = levelCombos[comboIdx];
     let delay = 0 // delay for the arrows to spawn
 
-    // increase count to move array that spawns the arrows every 1.9 seconds
+    // increase count to move array that spawns the arrows depending on difficulty
     incrementTimeout = setTimeout(() => {
-        // increase count every 1 second
+        // increase count every x second depending on difficulty
         incrementInterval = setInterval(() => {
             arrCount++;
         }, arrowSpawnRate);
@@ -428,7 +387,12 @@ function renderArrows(comboIdx) {
     // wait to spawn next arrow depending on difficulty
     combo.forEach((arr, index) => {
         appendArrowTimeout = setTimeout(() => {
-            console.log('drawing arrow');
+            if (lose) {
+                while (arrowArray.length) {
+                    arrowArray.pop();
+                }
+                return
+            };
             drawArrow(arr);
         }, delay);
         delay += arrowSpawnRate;
@@ -454,15 +418,21 @@ function renderArrows(comboIdx) {
 
 // function to add arrow to arrowArray, which is used to display the arrows
 function drawArrow(arr) {
-    arrowArray.push(new Arrow(
-        arr.arrow,
-        arr.startPos.x,
-        arr.startPos.y,
-        arr.hitPos.x,
-        arr.hitPos.y,
-        arr.velocity * arrowSpeed, // increase by set speed depending on difficulty
-        arrowDuration,
-    ));
+    if (!lose) {
+        arrowArray.push(new Arrow(
+            arr.arrow,
+            arr.startPos.x,
+            arr.startPos.y,
+            arr.hitPos.x,
+            arr.hitPos.y,
+            arr.velocity * arrowSpeed, // increase by set speed depending on difficulty
+            arrowDuration,
+        ));
+    } else {
+        while (arrowArray.length) {
+            arrowArray.pop();
+        }
+    }
 }
 
 // function to handle difficulty change click
@@ -526,15 +496,6 @@ function handleKeyPress(event) {
         event.preventDefault();
         handleGameStartClick();
     }
-
-    // press space to quick retry
-    // if (event.code === 'Space' && playBtn.classList.contains('hidden') && retryBtn.classList.contains('hidden')) {
-    //     event.preventDefault();
-    //     clearAllIntAndTimeout();
-    //     setTimeout(() => {
-    //         handleGameStartClick();
-    //     }, 1000)
-    // }
 }
 
 // release key
