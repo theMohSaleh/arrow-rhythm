@@ -279,7 +279,7 @@ function startGame() {
             arrowSpawnRate = 600;
             comboSpawnRate = 1500;
             comboStartIdx = 12;
-            comboEndIdx = 29;
+            comboEndIdx = 18;
             arrowDuration = 1500;
             console.log('normal');
             break;
