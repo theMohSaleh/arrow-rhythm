@@ -19,14 +19,13 @@ As a user in this game, I want
 - to be able to cycle between "Normal" and "Hard" as the game difficulty.
 - to be able to start the game by clicking on the Play button, which should start the game on the currently selected difficulty.
 - to be able to tell when should I time my button presses.
-- to be able to see the order of the arrows to be pressed of each sequence displayed before the first arrow of that sequence.
 - to be able to see the arrows ahead of time so I can know and time my button press more easily.
 - to have visual feedback telling me if I have pressed the arrows on the correct time or not.
-- to see my HP drop upon missing any button in any sequence, which should result in a loss upon losing all of my HP.
+- to see my HP drop upon missing any button in any sequence, which should result in a "Game Over" screen upon losing all of my HP.
 - to see a game over screen or a victory screen upon losing or winning the game.
-- to able to click on retry on the game over screen to quickly restart the level or click on home to go back to the starting page.
+- to be able to click on retry on the game over screen to quickly restart the level or click on home to go back to the starting page.
 - to be able to click on home in the victory screen to go back to the starting page.
-- the game to end and result in a victory if my HP did not drop to 0
+- the game to end and result in a victory if my HP did not drop to 0 and there are no more arrows to be pressed.
 
 ### Pseudo code
 
@@ -109,7 +108,7 @@ Cicking on Retry or pressing the spacebar will restart the level with the same s
 
 ![Game Start](./assets/lose.png)
 
-### Next Steps
+### Next Steps - Future Plans
 
 - Add more levels, such as endless mode
 - Add mobile compatibility
