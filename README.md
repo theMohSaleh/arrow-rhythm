@@ -2,7 +2,15 @@
 ### Game Idea
 A rhythm game where the player needs to use the arrow keys and press the corresponding arrows that appear on the screen in the correct order and timing.
 
+https://themohsaleh.github.io/arrow-rhythm/
+
 ![Main Menu](./plan/Untitled-2024-10-01-0944.png)
+
+### Technologies
+- HTML - Structure and content of the webpage
+- HTML Canvas - Element for rendering 2D shapes
+- Javascript - Logic of the webpage
+- CSS - Style
 
 ### User stories
 As a user in this game, I want
@@ -62,6 +70,8 @@ Read the instructions to get an idea of how the game works. Afterwards, cycle th
 
 ### Playing the game
 
+To play the game, [Click here!](https://themohsaleh.github.io/arrow-rhythm/)
+
 #### Game Rules
 The player will have to press on the arrow keys on their keyboard for each arrow on the screen when they align up with their shadow part.
 For example, when the filled → aligns with the outlined → , Press the Right Arrow key to hit the arrow on beat!
@@ -98,3 +108,9 @@ Upon losing all health, the player will be shown a Game Over screen. During the 
 Cicking on Retry or pressing the spacebar will restart the level with the same selected difficulty
 
 ![Game Start](./assets/lose.png)
+
+### Next Steps
+
+- Add more levels, such as endless mode
+- Add mobile compatibility
+- Add support for higher refresh monitors
